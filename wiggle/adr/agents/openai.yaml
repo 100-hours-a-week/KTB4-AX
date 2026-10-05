@@ -1,0 +1,3 @@
+interface:
+  display_name: "ADR"
+  short_description: "Decide, then record it as an ADR"
