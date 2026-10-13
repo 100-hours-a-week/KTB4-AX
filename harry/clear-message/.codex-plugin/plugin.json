@@ -1,0 +1,21 @@
+{
+  "name": "clear-message",
+  "version": "0.1.2",
+  "description": "받은 협업 메시지는 핵심과 대응 사항으로, 보낼 초안은 상대가 이해하기 쉬운 본문으로 정리",
+  "author": {
+    "name": "skills-harry"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Clear Message · 협업 메시지 정리",
+    "shortDescription": "받은 말 이해하기 · 보낼 말 정리하기",
+    "longDescription": "스킬을 선택하고 원문을 붙여 넣으세요. read-message는 핵심 맥락과 답변·작업 요청을 구분하고, write-message는 의도와 확실성을 보존해 바로 복사할 수 있는 전달문을 만듭니다.",
+    "developerName": "skills-harry",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": [
+      "$read-message 아래 받은 메시지의 핵심과 대응할 내용을 정리해줘.",
+      "$write-message 아래 내 초안을 상대가 이해하기 쉽게 정리해줘."
+    ]
+  }
+}

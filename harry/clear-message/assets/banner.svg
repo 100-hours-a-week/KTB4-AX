@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="300" viewBox="0 0 960 300" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">Clear Message</title>
+  <desc id="desc">Two message bubbles connect around a clear central signal, representing understanding received messages and organizing outgoing drafts.</desc>
+  <defs>
+    <linearGradient id="base" x2="960" y2="300" gradientUnits="userSpaceOnUse"><stop stop-color="#17232e"/><stop offset=".5" stop-color="#181b25"/><stop offset="1" stop-color="#282134"/></linearGradient>
+    <radialGradient id="halo"><stop stop-color="#b7c5e8" stop-opacity=".16"/><stop offset="1" stop-color="#b7c5e8" stop-opacity="0"/></radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" stroke="#fff" stroke-opacity=".025"/></pattern>
+  </defs>
+  <rect width="960" height="300" rx="20" fill="url(#base)"/>
+  <rect width="960" height="300" rx="20" fill="url(#grid)"/>
+  <ellipse cx="480" cy="150" rx="270" ry="180" fill="url(#halo)"/>
+  <rect x="16.5" y="16.5" width="927" height="267" rx="12" stroke="#b7c5e8" stroke-opacity=".15"/>
+  <text x="480" y="65" text-anchor="middle" fill="#c9d6ec" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" letter-spacing="4">CLEAR MESSAGE</text>
+  <path d="M360 151h86m68 0h86" stroke="#b7c5e8" stroke-opacity=".25" stroke-width="1.5"/>
+  <g stroke="#a7cce6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M282 112h62a14 14 0 0 1 14 14v38a14 14 0 0 1-14 14h-37l-22 17v-17h-3a14 14 0 0 1-14-14v-38a14 14 0 0 1 14-14Z" fill="#a7cce6" fill-opacity=".06"/>
+    <path d="M284 132h29m8 0h21m-58 13h16m8 0h34m-58 13h40" stroke-opacity=".65"/>
+  </g>
+  <circle cx="480" cy="151" r="28" fill="#c9d6ec" fill-opacity=".08" stroke="#c9d6ec" stroke-opacity=".45"/>
+  <path d="m468 151 8 8 17-18" stroke="#e6eaf5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <g stroke="#cdb9e9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M616 112h62a14 14 0 0 1 14 14v38a14 14 0 0 1-14 14h-3v17l-22-17h-37a14 14 0 0 1-14-14v-38a14 14 0 0 1 14-14Z" fill="#cdb9e9" fill-opacity=".06"/>
+    <path d="M619 132h56m-56 13h44m-44 13h32" stroke-opacity=".8"/>
+  </g>
+  <text x="313" y="221" text-anchor="middle" fill="#a7cce6" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" letter-spacing="2">READ</text>
+  <text x="647" y="221" text-anchor="middle" fill="#cdb9e9" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" letter-spacing="2">WRITE</text>
+  <text x="480" y="260" text-anchor="middle" fill="#c9d6ec" fill-opacity=".75" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12" letter-spacing=".7">Understand what matters. Say what you mean.</text>
+</svg>

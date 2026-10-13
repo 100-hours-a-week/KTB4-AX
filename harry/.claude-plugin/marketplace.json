@@ -1,0 +1,14 @@
+{
+  "name": "harry-ax",
+  "description": "Harry의 AX 동아리 협업 메시지 정리 플러그인",
+  "owner": {
+    "name": "SWHee"
+  },
+  "plugins": [
+    {
+      "name": "clear-message",
+      "source": "./clear-message",
+      "description": "받은 협업 메시지의 맥락·요청 파악과 보낼 초안 정리"
+    }
+  ]
+}
