@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "clear-message",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "받은 협업 메시지는 핵심과 대응 사항으로, 보낼 초안은 상대가 이해하기 쉬운 본문으로 정리",
   "author": {
     "name": "skills-harry"

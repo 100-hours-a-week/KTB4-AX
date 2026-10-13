@@ -8,7 +8,7 @@
 
 복잡한 협업 메시지에서 맥락과 요청을 찾고, 두서없는 초안을 전달하기 좋은 순서로 정리합니다.
 
-v0.1.1 · 두 가지 스킬 · 원문 붙여 넣기 · 별도 API 키·서버 없음
+v0.1.2 · Codex · Claude Code · 두 가지 스킬 · 별도 API 키·서버 없음
 
 [사용법](#사용법) · [출력 예시](#출력-예시) · [설치](#설치) · [검증](#검증과-피드백)
 
@@ -34,7 +34,8 @@ $write-message
 [내가 보내려던 초안]
 ```
 
-설치 환경에 따라 이름에 `clear-message:`가 붙을 수 있습니다. 스킬 선택기에 표시된 이름을 사용하세요.
+위는 Codex 호출 예시입니다. 스킬 선택기에 표시된 이름을 사용하세요.
+Claude Code에서는 `/clear-message:read-message` 또는 `/clear-message:write-message` 뒤에 원문을 붙입니다.
 
 ## 출력 예시
 
@@ -82,24 +83,34 @@ $write-message
 
 ## 설치
 
-Codex CLI가 설치된 환경에서 저장소를 받아 플러그인을 설치합니다.
+**Claude Code** · 대화창에서 두 명령을 각각 실행하세요.
 
-```bash
-git clone https://github.com/100-hours-a-week/KTB4-AX.git
-cd KTB4-AX/harry
-codex plugin marketplace add .
-codex plugin add clear-message@harry-ax
+```text
+/plugin marketplace add SWHee/skills
 ```
 
-설치 후 새 대화의 스킬 선택기에서 두 스킬을 확인하세요. 별도 API 키나 외부 서비스 연결은 필요하지 않습니다.
-설치 방식은 [OpenAI 공식 플러그인 문서](https://developers.openai.com/plugins/build/plugins)를 참고하세요.
+```text
+/plugin install clear-message@skills-harry
+```
 
-<details>
-<summary>플러그인 대신 두 스킬만 연결하기</summary>
-
-`harry/` 디렉터리에서 실행합니다. 같은 이름의 파일·링크가 있으면 먼저 확인하고, 플러그인과 중복 설치하지 마세요.
+**Codex** · 터미널에서 실행하세요.
 
 ```bash
+codex plugin marketplace add SWHee/skills
+codex plugin add clear-message@skills-harry
+```
+
+설치 후 새 대화를 시작하세요. 사용하는 환경의 안내만 따르면 됩니다. 별도 API 키나 서버 설정은 필요하지 않습니다.
+설치 방식: [Codex](https://developers.openai.com/plugins/build/plugins) · [Claude Code](https://code.claude.com/docs/en/plugin-marketplaces).
+
+<details>
+<summary>개발용: 저장소를 받아 Codex 스킬만 연결하기</summary>
+
+이미 저장소를 받았다면 해당 디렉터리에서 연결 명령만 실행하세요. 같은 이름의 파일·링크가 있으면 먼저 확인하고, 플러그인과 중복 설치하지 마세요.
+
+```bash
+git clone https://github.com/SWHee/skills.git
+cd skills
 mkdir -p ~/.codex/skills
 ln -s "$PWD/clear-message/skills/read-message" ~/.codex/skills/read-message
 ln -s "$PWD/clear-message/skills/write-message" ~/.codex/skills/write-message
@@ -112,9 +123,9 @@ ln -s "$PWD/clear-message/skills/write-message" ~/.codex/skills/write-message
 [평가 사례와 검증 기록](tests/behavioral.md)에서 요청 취소·대상 구분·조건부 부탁·약속과 예상 보존을 확인합니다.
 동일 입력을 반복한 소규모 행동 시험이며, 모든 모델이나 실제 업무에서의 정확도를 보장하는 성능 평가가 아닙니다.
 
-결과가 아쉬우면 [원본 저장소 이슈](https://github.com/SWHee/skills/issues)에 **사용한 스킬 · 익명화한 원문 · 기대한 결과와 실제 차이**를 남겨주세요.
+결과가 아쉬우면 [이슈](https://github.com/SWHee/skills/issues)에 **사용한 스킬 · 익명화한 원문 · 기대한 결과와 실제 차이**를 남겨주세요.
 공유용 원문에서 개인 정보·비공개 링크·접근 토큰을 제거하세요.
 
 <sub>예시는 모두 가상입니다. 원문을 넣는 AI 서비스의 데이터 처리 정책이 적용됩니다. 기본 동작은 정리 결과 반환이며, 메시지 발송·작업 실행·기술 사실 검증은 포함하지 않습니다.</sub>
 
-아카이브 출처: [SWHee/skills · 0.1.1](https://github.com/SWHee/skills/tree/a1ba77f82290ac08d40d8066050596a015ba03fc/clear-message). 설치 안내만 이 저장소의 경로에 맞췄습니다.
+아카이브 출처: [SWHee/skills · 0.1.2](https://github.com/SWHee/skills/tree/41e44a60b5f91d02495deb07eb3796790e6192c7/clear-message). 위의 간편 설치 명령은 배포 원본에서 설치합니다.
