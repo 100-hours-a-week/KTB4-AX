@@ -1,0 +1,20 @@
+{
+  "name": "harry-ax",
+  "interface": {
+    "displayName": "Harry · AX"
+  },
+  "plugins": [
+    {
+      "name": "clear-message",
+      "source": {
+        "source": "local",
+        "path": "./clear-message"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "보낼 말 정리하기"
+  short_description: "두서없는 협업 초안을 의도와 말투를 유지한 전달문으로 정리"
+  default_prompt: "$write-message 아래 내 초안을 상대가 이해하기 쉽게 정리해줘."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "받은 말 이해하기"
+  short_description: "받은 협업 메시지의 핵심과 답변·작업 요청을 빠르게 파악"
+  default_prompt: "$read-message 아래 받은 메시지를 핵심과 대응할 내용부터 정리해줘."
