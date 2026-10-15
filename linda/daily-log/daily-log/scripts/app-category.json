@@ -1,0 +1,27 @@
+{
+  "_설명": "창 제목 키워드를 먼저 보고, 없으면 앱 이름으로 판정한다. 대소문자 무시, 부분 일치. 분류: focus | neutral | drift. window에는 내 프로젝트 폴더·레포 이름을 넣는다.",
+  "window": {
+    "my-project": "focus"
+  },
+  "app": {
+    "Cursor": "focus",
+    "Code": "focus",
+    "Visual Studio Code": "focus",
+    "Terminal": "focus",
+    "iTerm": "focus",
+    "Ghostty": "focus",
+    "Obsidian": "focus",
+    "Orca": "focus",
+    "Discord": "neutral",
+    "Slack": "neutral",
+    "Claude": "neutral",
+    "ChatGPT": "neutral",
+    "Google Chrome": "neutral",
+    "Safari": "neutral",
+    "Arc": "neutral",
+    "Finder": "neutral",
+    "미리보기": "neutral",
+    "시스템 설정": "neutral",
+    "YouTube": "drift"
+  }
+}

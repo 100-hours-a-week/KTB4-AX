@@ -1,0 +1,33 @@
+{
+  "_설명": "이 파일을 같은 폴더에 config.json으로 복사한 뒤 값을 채운다. enabled가 false인 출처는 수집하지 않는다.",
+  "vault": "~/Documents/linda-vault",
+  "timezone": "Asia/Seoul",
+
+  "screenpipe": {
+    "enabled": true
+  },
+
+  "github": {
+    "enabled": false,
+    "user": "my-github-id",
+    "project_owner": "my-org",
+    "project_number": 1,
+    "start_statuses": ["In Progress", "Todo"],
+    "repos": ["my-org/my-repo"],
+    "wiki_repo": ""
+  },
+
+  "discord": {
+    "enabled": false,
+    "server_id": "",
+    "server_name": "",
+    "priority_channel_ids": [],
+    "exclude_channels": ["#잡담", "#링크"]
+  },
+
+  "sessions": {
+    "enabled": false,
+    "sessions_file": "",
+    "allowed_cwds": ["~/work/my-project"]
+  }
+}
