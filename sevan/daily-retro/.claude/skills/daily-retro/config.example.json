@@ -1,0 +1,25 @@
+{
+  "email": "your@email.com",
+  "course": "카카오테크 부트캠프 판교 - <강사명> 과정",
+  "name": "영어닉네임 (한글이름)/과정",
+  "team_number": 0,
+  "github_daily_scrum_repo": "100-hours-a-week/KTB4-<팀>th-wiki",
+  "github_troubleshooting_repo": "100-hours-a-week/KTB4-<팀>th-wiki",
+  "github_username": "본인 GitHub 계정",
+  "form_urls": {
+    "케빈": "",
+    "알렉스": "",
+    "찰리": ""
+  },
+
+  "defaults": {
+    "_주의": "아래 문장은 매일 그대로 제출됩니다. 반드시 본인 말로 고쳐 쓰세요. 팀원 전원이 같은 문장을 내면 강사에게 의미 없는 피드백이 됩니다.",
+    "아쉬웠던 점": "",
+    "좋았던 점": "",
+    "강사에 대한 피드백": "",
+    "교육/세미나에 대한 평점": "10",
+    "교육/세미나 평점을 남기신 이유": "",
+    "오늘의 본인의 성과에 대한 평점": "10",
+    "비고": ""
+  }
+}
