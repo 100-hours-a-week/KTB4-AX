@@ -1,0 +1,119 @@
+# daily-retro
+
+카카오테크 부트캠프 일일회고 폼을 채워주는 Agent Skill. **Claude Code 와 Codex 양쪽에서 동작합니다.**
+
+## 쓰는 법
+
+```bash
+git clone https://github.com/100-hours-a-week/KTB4-AX.git
+cd KTB4-AX/sevan/daily-retro
+claude
+```
+
+이 폴더(`sevan/daily-retro`)에서 Claude Code 를 띄우면 **설치 과정 없이 바로 스킬이 잡힙니다** (`.claude/skills/` 가 레포 안에 있어서). Codex 도 같은 폴더에서 그냥 실행하면 됩니다 (`.agents/skills/` 링크가 같이 들어 있습니다).
+
+그리고 한 줄:
+
+```
+오늘 회고 폼 작성해줘
+```
+
+첫 실행 때 설정이 없으면 스킬이 **네 가지를 한 번에 물어봅니다.** GitHub 활동 기록으로 추측값을 미리 채워주니, 맞으면 그대로 확인만 하면 됩니다.
+
+> 1. GitHub 계정 — `kkkk2058` 맞나요?
+> 2. 팀 번호 — `13` 맞나요?
+> 3. 소속 과정 — 인공지능 / 풀스택 / 클라우드
+> 4. 폼에 쓰는 이름 — `영어닉네임 (한글이름)/과정` 형식
+
+`gh` 가 없으면 설치까지 해줍니다 (인증만 `gh auth login` 으로 직접). 이 네 가지는 **최초 1회** 확인하고, 사용할 강사의 후기 폼 주소도 처음에 한 번 받아 개인 `config.json` 에 저장합니다. 이후로는 매일 `오늘 회고 폼 작성해줘` 한 줄이면 기록 기반 학습 내용과 매번 다르게 고른 긍정 피드백이 채워진 폼이 브라우저에 뜹니다. **제출 버튼은 항상 본인이** 누릅니다.
+
+터미널에서 직접 설정만 만들고 싶으면:
+
+```bash
+python3 .claude/skills/daily-retro/scripts/bootstrap.py
+```
+
+### 어디서나 쓰고 싶으면
+
+레포 폴더 밖에서도 쓰려면 한 번만:
+
+```bash
+bash install.sh
+```
+
+`~/.claude/skills/` 와 `~/.agents/skills/` 에 링크를 걸어줍니다. `git pull` 하면 업데이트가 바로 반영됩니다.
+설치 스크립트는 예시 설정을 `config.json` 으로 복사하지 않습니다. 설치 후에도 첫 실행에 본인 정보를 확인합니다.
+
+## 스킬: `daily-retro`
+
+GitHub Daily Scrum · Troubleshooting 이슈를 읽어서 교육 과정 후기 구글폼을 채운 링크를 만들고 브라우저에 띄웁니다.
+
+**동작 순서**
+
+1. 오늘 요일로 폼을 고릅니다 — 화·수·목은 과정 강사, 월·금은 팀 번호 기준 분단 강사. 폼 주소는 공개 레포에 두지 않으므로, 강사 폼을 처음 쓸 때 스킬이 물어보면 부트캠프 공지의 후기 폼 링크를 붙여 넣으세요 (본인 `config.json` 에만 저장됩니다)
+2. `gh` 로 그날 Daily Scrum 이슈에서 본인 코멘트를 읽습니다
+3. 학습 요약과 성과는 실제 기록으로 쓰고, 개선점은 앞으로 실천할 긍정적인 목표로 표현합니다. 기록에 없는 성취를 만들지 않습니다
+4. 의견 항목은 여러 긍정 문구 중 매번 무작위로 고릅니다. 평점은 설정값을 유지합니다
+5. 사전채움 링크를 만들어 기본 브라우저로 엽니다
+6. 채운 값을 출처와 함께 표로 보여줍니다 — **제출은 직접**
+
+**사용 예**
+
+```
+오늘 회고 폼 작성해줘
+9/17 회고 폼 작성해줘
+오늘 회고 써줘, 좋았던 점은 실습 시간이 넉넉했던 거로
+```
+
+마지막 예처럼 그날 할 말을 같이 주면 무작위 문구보다 우선합니다.
+
+### 매번 다른 긍정 피드백
+
+기본 모드 `positive_random`에서는 아래 다섯 항목에 각각 10개의 긍정 문구를 준비해 두고 무작위로 고릅니다. 각 항목은 직전 실행과 같은 문장을 피합니다. 사용자 사이의 중복까지 보장하지는 않습니다.
+
+- 아쉬웠던 점: 배움을 더 이어가고 싶다는 긍정적인 기대
+- 좋았던 점: 배움과 성장에 대한 긍정적인 소감
+- 강사 피드백: 감사와 응원의 표현
+- 교육 평점 이유: 학습의 의미와 동기
+- 개선점: 앞으로 실천할 학습 목표. 기록에서 정리할 목표가 있으면 그 내용을 우선
+
+부정적인 평가나 불만을 자동 생성하지 않습니다. 실제로 하지 않은 학습·실습·성과를 무작위로 만들지도 않습니다. 자동 선택 문구는 초안이므로 열린 폼에서 확인하고 제출하세요.
+
+기존 `config.json`도 그대로 사용할 수 있습니다. `feedback_mode`가 없으면 무작위 모드가 기본으로 적용되어 이전 공통 의견 문구를 대체합니다. 고정 문구를 쓰려면 `feedback_mode`를 `fixed`로 바꾸고 `defaults`에 적으세요. 평점은 `defaults` 값을 유지합니다.
+
+`config.json` 은 `.gitignore` 에 있어 커밋되지 않습니다 (사람마다 다르고 개인정보가 들어갑니다).
+
+## 폼만 따로 다루기
+
+```bash
+# 폼의 질문 라벨과 entry ID 확인
+python3 .claude/skills/daily-retro/scripts/prefill.py --form "<폼 URL>" --list
+
+# answers.json 으로 링크 생성 + 브라우저 열기
+python3 .claude/skills/daily-retro/scripts/prefill.py --form "<폼 URL>" --answers answers.json
+
+# 설정 자동 감지 결과만 보기
+python3 .claude/skills/daily-retro/scripts/bootstrap.py --json
+
+# 긍정 의견 초안 생성 (직전 선택은 개인 .feedback-state.json에 저장)
+python3 .claude/skills/daily-retro/scripts/feedback.py --output feedback.json
+```
+
+`prefill.py` 는 entry ID 를 하드코딩하지 않고 폼 HTML 에서 뽑아 **질문 라벨로 매칭**합니다. 키가 0개 또는 2개 이상 문항에 걸리면 에러로 멈추므로, 조용히 엉뚱한 칸에 값이 들어가는 일이 없습니다.
+
+## 필요한 것
+
+- macOS, `python3`
+- `gh` CLI — 없으면 스킬이 `brew install gh` 로 설치합니다. 인증만 직접: `gh auth login`
+
+## 첫 실행 검증
+
+```bash
+python3 -B -m unittest discover -s tests -v
+```
+
+새 복사본에서 설정 생성·입력 검증·설치 링크·긍정 문구 선택·직전 문구 반복 방지·직접 지정한 값의 우선 적용·사전채움 링크 생성을 확인합니다. GitHub 응답과 폼은 테스트용 데이터를 쓰고, 전역 설치 경로는 임시 폴더로 돌립니다. 실제 계정 설정 변경·브라우저 실행·폼 제출은 하지 않습니다.
+
+## 스킬 추가하기
+
+`.claude/skills/<이름>/SKILL.md` 를 만들면 됩니다. 프론트매터는 `name` 과 `description` 두 개만 필수이고, 이 포맷([Agent Skills](https://agentskills.io))은 Claude Code 와 Codex 가 공통으로 읽습니다.
