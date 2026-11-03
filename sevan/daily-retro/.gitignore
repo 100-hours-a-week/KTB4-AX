@@ -1,4 +1,7 @@
 **/config.json
 answers.json
+feedback.json
+user-overrides.json
+**/.feedback-state.json
 __pycache__/
 *.py[cod]

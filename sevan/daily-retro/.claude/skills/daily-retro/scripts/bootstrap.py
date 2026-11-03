@@ -106,13 +106,14 @@ def detect(override=None):
 
 
 STARTER_DEFAULTS = {
-    "_주의": "아래 문장은 매일 그대로 제출됩니다. 반드시 본인 말로 고쳐 쓰세요.",
-    "아쉬웠던 점": "특별히 아쉬웠던 점은 없었습니다.",
-    "좋았던 점": "진행 중인 프로젝트에 바로 적용해볼 수 있는 내용이라 도움이 되었습니다.",
-    "강사에 대한 피드백": "질문을 편하게 할 수 있는 분위기여서 좋았습니다. 감사합니다.",
+    "_주의": "의견은 기본적으로 긍정 문구를 무작위 선택합니다. 제출 전에 확인하세요. 고정 문구는 feedback_mode를 fixed로 바꾸고 아래에 적습니다.",
+    "아쉬웠던 점": "",
+    "좋았던 점": "",
+    "강사에 대한 피드백": "",
     "교육/세미나에 대한 평점": "10",
-    "교육/세미나 평점을 남기신 이유": "전반적으로 만족스러웠고, 배운 내용을 바로 작업에 적용해볼 수 있었습니다.",
+    "교육/세미나 평점을 남기신 이유": "",
     "오늘의 본인의 성과에 대한 평점": "10",
+    "스스로 개선하거나": "",
     "비고": "",
 }
 
@@ -241,6 +242,7 @@ def main():
         "github_troubleshooting_repo": f"{ORG}/KTB4-{t}th-wiki",
         "github_username": got["github_username"],
         "form_urls": {},
+        "feedback_mode": "positive_random",
         "defaults": STARTER_DEFAULTS,
     }
     with open(path, "w", encoding="utf-8") as f:

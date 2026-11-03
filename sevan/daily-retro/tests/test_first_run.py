@@ -21,7 +21,7 @@ class FirstRunTests(unittest.TestCase):
         self.root = Path(self.tmp.name)
         self.package = self.root / "daily-retro"
         shutil.copytree(PACKAGE, self.package, symlinks=True,
-                        ignore=shutil.ignore_patterns("config.json", "__pycache__"))
+                        ignore=shutil.ignore_patterns("config.json", ".feedback-state.json", "__pycache__"))
         self.skill = self.package / ".claude/skills/daily-retro"
         self.config = self.skill / "config.json"
         self.bin = self.root / "bin"
@@ -113,6 +113,7 @@ sys.exit(subprocess.call(["/bin/" + name, *args]))
         self.assertEqual(config["team_number"], 13)
         self.assertEqual(config["course"], "카카오테크 부트캠프 판교 - 알렉스 과정")
         self.assertEqual(config["form_urls"], {})
+        self.assertEqual(config["feedback_mode"], "positive_random")
         self.assertEqual(config["github_daily_scrum_repo"], "100-hours-a-week/KTB4-13th-wiki")
 
     def test_placeholder_name_is_rejected(self):
@@ -214,6 +215,92 @@ sys.exit(subprocess.call(["/bin/" + name, *args]))
                                  "--answers", str(answers), "--no-open")
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("여러 문항", result.stderr)
+
+    def feedback_config(self, **changes):
+        config = json.loads((self.skill / "config.example.json").read_text())
+        config.update(changes)
+        self.config.write_text(json.dumps(config, ensure_ascii=False))
+        return config
+
+    def feedback(self, *args):
+        result = self.run_script("feedback.py", *args)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        return json.loads(result.stdout)
+
+    def test_positive_feedback_changes_each_field_without_changing_scores(self):
+        self.feedback_config()
+        first, second = self.feedback(), self.feedback()
+        bank = json.loads((self.skill / "assets/positive-feedback.json").read_text())
+        self.assertEqual(len(bank), 5)
+        for key, candidates in bank.items():
+            self.assertGreaterEqual(len(set(candidates)), 10)
+            self.assertIn(first[key], candidates)
+            self.assertIn(second[key], candidates)
+            self.assertNotEqual(first[key], second[key])
+            self.assertEqual(second["_sources"][key], "positive_random")
+        self.assertEqual(second["교육/세미나에 대한 평점"], "10")
+        self.assertEqual(second["오늘의 본인의 성과에 대한 평점"], "10")
+        self.assertEqual(second["비고"], "")
+        self.assertNotIn("오늘 학습한 내용", second)
+        self.assertNotIn("본인의 성과 평점을 남기신 이유", second)
+
+    def test_legacy_config_uses_random_feedback_without_rewriting_config(self):
+        config = self.feedback_config()
+        del config["feedback_mode"]
+        config["defaults"]["좋았던 점"] = "이전 공통 문구"
+        config["defaults"]["교육/세미나에 대한 평점"] = "9"
+        self.config.write_text(json.dumps(config, ensure_ascii=False))
+        before = self.config.read_bytes()
+        result = self.feedback()
+        self.assertNotEqual(result["좋았던 점"], "이전 공통 문구")
+        self.assertEqual(result["교육/세미나에 대한 평점"], "9")
+        self.assertEqual(self.config.read_bytes(), before)
+
+    def test_fixed_feedback_preserves_personal_defaults(self):
+        config = self.feedback_config(feedback_mode="fixed")
+        config["defaults"]["좋았던 점"] = "배움을 함께 나눌 수 있어 좋았습니다."
+        self.config.write_text(json.dumps(config, ensure_ascii=False))
+        first, second = self.feedback(), self.feedback()
+        self.assertEqual(first, second)
+        self.assertEqual(first["좋았던 점"], config["defaults"]["좋았던 점"])
+        self.assertEqual(first["_sources"]["좋았던 점"], "config.defaults")
+        self.assertFalse((self.skill / ".feedback-state.json").exists())
+
+    def test_user_feedback_and_intentional_blank_override_random_choices(self):
+        self.feedback_config()
+        user = {"좋았던 점": "오늘 배운 개념을 연결해볼 수 있어 좋았습니다.",
+                "강사에 대한 피드백": "", "교육/세미나에 대한 평점": "9"}
+        overrides = self.root / "user-overrides.json"
+        overrides.write_text(json.dumps(user, ensure_ascii=False))
+        result = self.feedback("--overrides", str(overrides))
+        for key, value in user.items():
+            self.assertEqual(result[key], value)
+            self.assertEqual(result["_sources"][key], "user")
+
+    def test_corrupt_feedback_history_does_not_block_generation(self):
+        self.feedback_config()
+        state = self.skill / ".feedback-state.json"
+        state.write_text("{")
+        result = self.feedback()
+        self.assertEqual(json.loads(state.read_text())["좋았던 점"], result["좋았던 점"])
+
+    def test_random_feedback_and_record_answers_make_prefill_link(self):
+        self.feedback_config()
+        fixture, answers, labels = self.form_fixture()
+        generated = self.root / "feedback.json"
+        result = self.run_script("feedback.py", "--output", str(generated))
+        self.assertEqual(result.returncode, 0, result.stderr)
+        values = json.loads(generated.read_text())
+        values.update(이름="fixture.kim (테스트)/인공지능", 수업일="2026-11-03",
+                      **{"오늘 학습한 내용": "실제 기록에서 정리한 학습 요약"})
+        answers.write_text(json.dumps(values, ensure_ascii=False))
+        result = self.run_script("prefill.py", "--form", fixture.as_uri(),
+                                 "--answers", str(answers), "--no-open")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        query = parse_qs(urlsplit(result.stdout.strip()).query)
+        for key in ("좋았던 점", "강사에 대한 피드백", "스스로 개선하거나", "오늘 학습한 내용"):
+            self.assertEqual(query[f"entry.{100 + labels.index(key)}"], [values[key]])
+        self.assertFalse(any("sources" in key for key in query))
 
 
 if __name__ == "__main__":
