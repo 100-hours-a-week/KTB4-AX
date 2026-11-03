@@ -1,1 +1,4 @@
 **/config.json
+answers.json
+__pycache__/
+*.py[cod]

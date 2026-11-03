@@ -1,11 +1,13 @@
 ---
 name: daily-retro
-description: 부트캠프/동아리 교육 과정 후기 구글폼을, 이미 쓰고 있는 GitHub Daily Scrum·Troubleshooting 기록을 근거로 채워서 브라우저에 띄운다. "오늘 회고 폼 작성해줘", "일일회고 제출", "daily retro" 요청 시 사용. 한 번 실행하면 질문 없이 오늘 날짜 기록을 읽어 모든 칸이 채워진 사전채움 링크를 만들고 브라우저를 자동으로 연다.
+description: 부트캠프/동아리 교육 과정 후기 구글폼을 GitHub Daily Scrum·Troubleshooting 기록을 근거로 채워서 브라우저에 띄운다. "오늘 회고 폼 작성해줘", "일일회고 제출", "daily retro" 요청 시 사용. 첫 실행에 개인 설정과 폼 주소를 확인하고, 이후에는 저장한 설정으로 사전채움 링크를 만든다. 제출은 사용자가 직접 한다.
 ---
 
 # 일일회고 자동작성 에이전트
 
-**한 번 실행 = 중간 질문 없이, 모든 칸이 채워진 폼이 열린다.** 오늘 날짜 Daily Scrum·Troubleshooting을 읽어 사실 항목을 쓰고, 의견 항목은 사용자가 config에 미리 써둔 기본 문구로 채운 사전채움(prefill) 링크를 만들어 기본 브라우저로 연다. 사용자는 훑어보고 고칠 것만 고쳐서 제출한다.
+첫 실행에 개인 설정과 사용할 폼 주소를 확인한다. 이후에는 오늘 날짜 Daily Scrum·Troubleshooting을 읽어 사실 항목을 쓰고, 의견 항목은 config의 기본 문구로 채운 사전채움(prefill) 링크를 만들어 기본 브라우저로 연다. 사용자는 훑어보고 고칠 것만 고쳐서 제출한다.
+
+아래 `<스킬폴더>`는 이 SKILL.md가 있는 실제 디렉터리다. 전역 설치 링크로 호출됐을 때도 작업 디렉터리에 `.claude/skills/`가 있다고 가정하지 말고, 링크 원본의 스크립트와 `config.json`을 쓴다.
 
 ## 절대 규칙
 
@@ -93,7 +95,7 @@ gh issue view <번호> --repo <troubleshooting_repo> --json title,body,comments
 
 ## 3. answers.json 작성 — 모든 칸을 채운다
 
-`config.defaults`를 그대로 깔고, 그 위에 이번 회차의 사실 항목과 사용자가 말해준 값을 덮어쓴다. 키는 **폼 질문 라벨의 고유한 부분 문자열**이다 (entry ID는 폼마다 랜덤이라 절대 하드코딩하지 않는다 — 스크립트가 라벨로 매칭한다).
+`config.defaults`에서 `_`로 시작하는 안내용 키를 제외하고, 그 위에 이번 회차의 사실 항목과 사용자가 말해준 값을 덮어쓴다. 키는 **폼 질문 라벨의 고유한 부분 문자열**이다 (entry ID는 폼마다 랜덤이라 절대 하드코딩하지 않는다 — 스크립트가 라벨로 매칭한다).
 
 ```json
 {
@@ -124,18 +126,18 @@ gh issue view <번호> --repo <troubleshooting_repo> --json title,body,comments
 라벨을 모르면 먼저 확인한다:
 
 ```bash
-python3 .claude/skills/daily-retro/scripts/prefill.py --form "<form_url>" --list
+python3 <스킬폴더>/scripts/prefill.py --form "<form_url>" --list
 ```
 
 ## 4. 링크 생성 + 브라우저 자동 실행
 
 ```bash
-python3 .claude/skills/daily-retro/scripts/prefill.py --form "<form_url>" --answers answers.json
+python3 <스킬폴더>/scripts/prefill.py --form "<form_url>" --answers answers.json
 ```
 
 스크립트가 폼 HTML에서 entry ID를 뽑아 라벨로 매칭하고, URL 인코딩·날짜 분해(`_year`/`_month`/`_day`)·선택지 검증까지 한 뒤 **사용자 기본 브라우저로 링크를 연다** (`--no-open` 으로 끌 수 있음). 기본 브라우저에는 보통 구글 로그인 세션이 있으므로 바로 제출할 수 있다.
 
-라벨 키가 0개 또는 2개 이상 문항에 걸리면 스크립트가 에러로 멈춘다 — 조용히 엉뚱한 칸에 들어가지 않는다. 그때는 `--list` 로 라벨을 보고 키를 더 구체적으로 고친다.
+띄어쓰기 차이는 무시하고 매칭한다. 라벨 키가 0개 또는 2개 이상 문항에 걸리면 스크립트가 에러로 멈춘다 — 조용히 엉뚱한 칸에 들어가지 않는다. 그때는 `--list` 로 라벨을 보고 키를 더 구체적으로 고친다.
 
 **클릭·타이핑 자동화는 쓰지 않는다.** (탭 인식 실패, 드래프트 자동복원, 권한 프롬프트 등으로 과거에 반복 실패했다.)
 

@@ -7,8 +7,10 @@
   prefill.py --form <URL> --answers a.json [--open]   # 링크 생성 (기본으로 브라우저에서 염)
 
 answers.json 은 {"라벨의 일부": "값"} 형태. 키는 질문 라벨의 고유한 부분 문자열이면 된다.
+  - 라벨 매칭에서는 폼마다 다른 띄어쓰기를 무시한다.
   - 날짜 문항(타입 9)은 값을 "YYYY-MM-DD" 로 준다.
   - 값이 빈 문자열이면 그 문항은 링크에서 빼서 사람이 직접 채우게 남긴다.
+  - _ 로 시작하는 키는 config.defaults 의 안내용 메타데이터라 무시한다.
   - 키가 0개 또는 2개 이상의 라벨에 걸리면 에러로 멈춘다(조용히 틀리지 않게).
 """
 import argparse, json, re, subprocess, sys, urllib.request
@@ -39,7 +41,8 @@ def parse_questions(html: str):
 
 
 def resolve(questions, key):
-    hits = [q for q in questions if key in q["label"]]
+    normalized_key = re.sub(r"\s+", "", key)
+    hits = [q for q in questions if normalized_key in re.sub(r"\s+", "", q["label"])]
     if not hits:
         sys.exit(f"[에러] 라벨에 '{key}' 를 포함하는 문항이 없습니다. --list 로 실제 라벨을 확인하세요.")
     if len(hits) > 1:
@@ -52,6 +55,8 @@ def build(form_url, questions, answers):
     parts = ["usp=pp_url"]
     skipped = []
     for key, value in answers.items():
+        if key.startswith("_"):
+            continue
         q = resolve(questions, key)
         value = str(value).strip()
         if not value:

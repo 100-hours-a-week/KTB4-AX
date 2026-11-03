@@ -71,7 +71,7 @@ def detect(override=None):
 
     teams = {int(m.group(1)) for r in repos
              if (m := re.fullmatch(r"KTB4-(\d+)th-wiki", r, re.I))}
-    if override.get("team"):
+    if override.get("team") and str(override["team"]).isdecimal():
         teams = {int(override["team"])}
     if len(teams) == 1:
         t = teams.pop()
@@ -162,9 +162,9 @@ def resolve(a, d):
 
     checks = {
         "github_username": lambda v: bool(str(v).strip()),
-        "team": lambda v: str(v).isdigit() and 1 <= int(v) <= 20,
+        "team": lambda v: str(v).isdecimal() and 1 <= int(v) <= 20,
         "course": lambda v: v in COURSES,
-        "name": lambda v: bool(str(v).strip()),
+        "name": lambda v: bool(str(v).strip()) and PLACEHOLDER not in str(v),
     }
     labels = {
         "github_username": ("GitHub 계정을 알려주세요.", "Daily Scrum 코멘트를 찾을 때 씁니다."),
@@ -198,6 +198,11 @@ def main():
     ap.add_argument("--force", action="store_true", help="기존 config.json 덮어쓰기")
     a = ap.parse_args()
 
+    path = os.path.join(HERE, "config.json")
+    if os.path.exists(path) and not a.force and not a.suggest:
+        print(f"이미 있습니다: {path}\n덮어쓰려면 --force", file=sys.stderr)
+        return
+
     d = detect({"github_username": a.github_username, "team": a.team, "course": a.course})
     if a.suggest:
         print(json.dumps({
@@ -208,11 +213,6 @@ def main():
             "_detected_from": d.get("_detected_from", []),
         }, ensure_ascii=False, indent=2))
         return
-
-    path = os.path.join(HERE, "config.json")
-    if os.path.exists(path) and not a.force:
-        print(f"이미 있습니다: {path}\n덮어쓰려면 --force", file=sys.stderr)
-        sys.exit(0)
 
     got, problem = resolve(a, d)
     if got is None:
@@ -240,6 +240,7 @@ def main():
         "github_daily_scrum_repo": f"{ORG}/KTB4-{t}th-wiki",
         "github_troubleshooting_repo": f"{ORG}/KTB4-{t}th-wiki",
         "github_username": got["github_username"],
+        "form_urls": {},
         "defaults": STARTER_DEFAULTS,
     }
     with open(path, "w", encoding="utf-8") as f:
